@@ -1,13 +1,7 @@
 import React, {useState} from 'react';
 import './App.css';
+import {BanknoteType, filterOptionType, NewComponent} from "./NewComponent";
 
-type BanknoteType = {
-    currency: string
-    nominal: number
-    number: string
-}
-
-type filterOptionType = 'all' | 'dollar' | 'ruble'
 
 function App() {
     const [money] = useState([
@@ -21,34 +15,21 @@ function App() {
         {currency: 'ruble', nominal: 50, number: ' v1234567890'},
     ]);
     const [filterOption, setFilterOption] = useState<filterOptionType>('all');
-    let currentBanknotes: Array<BanknoteType> = [...money];
+    let currentMoney: Array<BanknoteType> = [...money];
     if (filterOption === 'ruble') {
-        currentBanknotes = money.filter((banknote: BanknoteType) => banknote.currency === 'ruble');
+        currentMoney = money.filter((banknote: BanknoteType) => banknote.currency === 'ruble');
     } else if (filterOption === 'dollar') {
-        currentBanknotes = money.filter((banknote: BanknoteType) => banknote.currency === 'dollar');
+        currentMoney = money.filter((banknote: BanknoteType) => banknote.currency === 'dollar');
     }
-    const onClickFilterHandler = (filterBy: filterOptionType) => setFilterOption(filterBy);
+    const onClickHandler = (filterBy: filterOptionType) => setFilterOption(filterBy);
 
-    const banknotesListItemElements = currentBanknotes.map((item: BanknoteType) => {
-        return (
-            <li key={item.number}>
-                <span> {item.currency}</span>
-                <span> {item.nominal}</span>
-                <span> {item.number}</span>
-            </li>
-        )
-    });
 
     return (
         <>
-            <ul>
-                {banknotesListItemElements}
-            </ul>
-            <div style={{marginLeft: '35px'}}>
-                <button onClick={() => onClickFilterHandler('all')}>all</button>
-                <button onClick={() => onClickFilterHandler('ruble')}>rubles</button>
-                <button onClick={() => onClickFilterHandler('dollar')}>dollars</button>
-            </div>
+            <NewComponent
+                currentBanknotes={currentMoney}
+                onClickFilterHandler={onClickHandler}
+            />
         </>
     )
 }
